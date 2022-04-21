@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <RobotList />;
 }
 
+const RobotList = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [robots, setRobots] = useState([]);
+  const onChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setRobots([...robots, searchTerm]);
+    setSearchTerm('');
+  };
+  return (
+    <>
+      <form onSubmit={onSubmit}>
+        <input onChange={onChange} value={searchTerm}></input>
+        <button type='submit'>Enter</button>
+      </form>
+
+      {robots.length > 0 && (
+        <>
+          {robots.map((el) => {
+            return (
+              <img
+                alt='robot'
+                width={200}
+                height={200}
+                src={`https://robohash.org/${el}`}
+                onClick={() => setRobots(robots.filter((bot) => bot !== el))}
+              ></img>
+            );
+          })}
+        </>
+      )}
+    </>
+  );
+};
 export default App;
