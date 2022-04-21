@@ -1,25 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
 function App() {
+  const [nestedObjected, setNestedObject] = useState({
+    taxi: 'a car licensed to transport passengers in return for payment of a fare',
+    food: {
+      sushi:
+        'a traditional Japanese dish of prepared rice accompanied by seafood and vegetables',
+      apple: {
+        Honeycrisp:
+          'an apple cultivar developed at the MAES Horticultural Research Center',
+        Fuji: 'an apple cultivar developed by growers at Tohoku Research Station',
+      },
+    },
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ margin: 'auto', width: '70%', paddingTop: 40 }}>
+      <DisplayNested nestedObjected={nestedObjected} />
     </div>
   );
 }
+
+const DisplayNested = ({ nestedObjected }) => {
+  return (
+    <>
+      {Object.entries(nestedObjected).map(([key, value]) => {
+        console.log(key);
+        console.log(value);
+        if (typeof value === 'object') {
+          console.log('In object if');
+          return (
+            <>
+              <p>{`${key}: `}</p>
+              <div style={{ paddingLeft: 50 }}>
+                <DisplayNested nestedObjected={value} />
+              </div>
+            </>
+          );
+        } else {
+          return (
+            <>
+              <p>{`${key}: ${value}`}</p>
+            </>
+          );
+        }
+      })}
+    </>
+  );
+};
+
+// at each key we want to check if the value is an object
+// if so, render key and indent, then recurse
+// if not, render key and value
 
 export default App;
